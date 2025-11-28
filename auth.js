@@ -18,5 +18,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth }) => {
       return !!auth
     },
+    async signIn() {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      // After login, redirect to /projects
+      if (url === baseUrl || url === `${baseUrl}/`) {
+        return `${baseUrl}/projects`
+      }
+      // Allow callback URLs on the same origin
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+      return baseUrl
+    },
   },
 })

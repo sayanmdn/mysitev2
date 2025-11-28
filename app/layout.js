@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'sayantanmishra.com',
-  description: 'Personal website with Google authentication',
+  title: 'Sayantan Mishra - Senior Full-Stack Engineer & AI Developer',
+  description: 'Senior Full-Stack Engineer with 5.6 years building scalable, production-grade systems. Specializing in AI implementation, LLM integration, and cloud architecture.',
 }
 
 export default function RootLayout({ children }) {
