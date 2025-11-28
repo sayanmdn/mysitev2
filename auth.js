@@ -5,6 +5,21 @@ import clientPromise from "./lib/mongodb"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
+  session: {
+    strategy: "database",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  cookies: {
+    sessionToken: {
+      name: `authjs.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -14,11 +29,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/login",
   },
+  trustHost: true,
+  debug: true,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
     },
-    async signIn() {
+    async signIn({ user, account, profile }) {
       return true
     },
     async redirect({ url, baseUrl }) {
@@ -31,6 +48,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return url
       }
       return baseUrl
+    },
+    async session({ session, user }) {
+      return session
     },
   },
 })
