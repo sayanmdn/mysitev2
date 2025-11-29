@@ -28,7 +28,13 @@ export async function POST(request) {
 
     try {
       // Query RAG system
+      const startTime = Date.now()
+      console.log(`[Chat] Starting RAG query for question: "${question.substring(0, 50)}${question.length > 50 ? '...' : ''}"`)
+
       const answer = await queryRAG(question, collectionName)
+
+      const duration = Date.now() - startTime
+      console.log(`[Chat] RAG query completed in ${duration}ms (${(duration / 1000).toFixed(2)}s)`)
 
       return NextResponse.json({
         success: true,
